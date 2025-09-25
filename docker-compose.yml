@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # The Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+
+  # The User Service (FastAPI)
+  user-service:
+    build:
+      context: ./services/user
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/user:/app
+    env_file:
+      - ./services/user/.env
+
+  # The Integrations Service (FastAPI)
+  integrations-service:
+    build:
+      context: ./services/integrations
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./services/integrations:/app
+    env_file:
+      - ./services/integrations/.env
+
+  # The Assistant Service (FastAPI)
+  assistant-service:
+    build:
+      context: ./services/assistant
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./services/assistant:/app
+    env_file:
+      - ./services/assistant/.env
+    # The Assistant Service depends on the Integrations Service for data
+    depends_on:
+      - integrations-service
+    
+  # The Actions Service (FastAPI)
+  actions-service:
+    build:
+      context: ./services/actions
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./services/actions:/app
+    env_file:
+      - ./services/actions/.env
+    # The Actions Service depends on the Integrations and Assistant services
+    depends_on:
+      - integrations-service
+      - assistant-service
