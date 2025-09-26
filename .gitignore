@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 venv/
 node_modules/
+Project Description.md
+setup_services.ps1
