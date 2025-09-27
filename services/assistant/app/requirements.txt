@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+requests
+pandas  # For formatting model input (X)
+scikit-learn  # Required to load your pickled model
+transformers  # For NLP email urgency detection
+torch  # Required by transformers
